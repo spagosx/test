@@ -21,7 +21,9 @@ class FlickrWireframe: Wireframe {
         
         let presenter = DefaultFlickrListPresenter()
         view.presenter = presenter
+        presenter.view = view as! FlickrListView
         let interactor = DefaultFlickrListInteractor(networkManager: FlickrNetwork(session: URLSession.shared), feedParser: FlickrFeedParser())
         presenter.interactor = interactor
+        interactor.output = presenter
     }
 }

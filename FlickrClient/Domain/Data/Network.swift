@@ -18,7 +18,9 @@ protocol NetworkSession {
 extension URLSession: NetworkSession {
     func start(with request: URLRequest, finished: @escaping (Data?, Error?)->()) {
         dataTask(with: request) { (data, response, error) in
-            finished(data, error)
+            DispatchQueue.main.async {            
+                finished(data, error)
+            }
             }.resume()
     }
 }

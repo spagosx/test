@@ -11,6 +11,8 @@ class ViewController: UIViewController, FlickrListView {
 
     var presenter: FlickrListPresenter?
     
+    @IBOutlet weak var tableView: UITableView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -18,8 +20,23 @@ class ViewController: UIViewController, FlickrListView {
         presenter?.viewReady()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func refresh() {
+        tableView.reloadData()
+    }
+}
+
+extension ViewController: UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return presenter?.numberOfItems() ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let presenter = presenter else {
+            return UITableViewCell()
+        }
+        let identifier = presenter.identifier(for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        return cell
     }
 }
