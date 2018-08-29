@@ -32,9 +32,3 @@ class FlickrListPresenterTests: XCTestCase {
 
 }
 
-class MockInteractor: FlickrListInteractor {
-    var fetchListInvocations: Int = 0
-    func fetchList() {
-        fetchListInvocations += 1
-    }
-}

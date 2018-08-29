@@ -28,6 +28,3 @@ class FlickrWireframeTests: XCTestCase {
     }
 }
 
-class MockFlickrView: FlickrView {
-    var presenter: FlickrListPresenter?
-}

@@ -24,15 +24,9 @@ class AppDelegateTests: XCTestCase {
         let application = UIApplication.shared.delegate as! AppDelegate
         let mockWireframe = MockWireframe()
         application.wireframe = mockWireframe
-        application.application(UIApplication.shared, didFinishLaunchingWithOptions: nil)
+        _ = application.application(UIApplication.shared, didFinishLaunchingWithOptions: nil)
         XCTAssertEqual(mockWireframe.wireUpInvocations.count, 1)
     }
     
 }
 
-class MockWireframe: Wireframe {
-    var wireUpInvocations: [FlickrView] = []
-    func wireUp(view: FlickrView) {
-        wireUpInvocations.append(view)
-    }
-}

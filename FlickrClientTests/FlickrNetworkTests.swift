@@ -1,5 +1,5 @@
 //
-//  FlickrClientTests.swift
+//  FlickrNetworkTests.swift
 //  FlickrClientTests
 //
 //  Created by Danny Spanners on 29/08/2018.
@@ -8,7 +8,7 @@
 import XCTest
 @testable import FlickrClient
 
-class FlickrClientTests: XCTestCase {
+class FlickrNetworkTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
@@ -20,16 +20,15 @@ class FlickrClientTests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func test_starts_task_on_session() {
+        let mockSession = MockSession()
+        let network = FlickrNetwork(session: mockSession)
+        network.fetchFrom(urlString: "http://test.com") { (data, error) in
         }
+        XCTAssertEqual(mockSession.startInvocations.count, 1)
+        XCTAssertEqual(mockSession.startInvocations.first!.url?.absoluteString, "http://test.com")
     }
     
 }
+
+

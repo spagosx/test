@@ -21,7 +21,7 @@ class FlickrWireframe: Wireframe {
         
         let presenter = DefaultFlickrListPresenter()
         view.presenter = presenter
-        let interactor = DefaultFlickrListInteractor(networkManager: FlickrNetwork())
+        let interactor = DefaultFlickrListInteractor(networkManager: FlickrNetwork(session: URLSession.shared))
         presenter.interactor = interactor
     }
 }
@@ -53,16 +53,42 @@ class DefaultFlickrListInteractor: FlickrListInteractor {
     }
     
     func fetchList() {
-        network.fetchFrom(urlString: "")
+        let urlString = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=1"
+        network.fetchFrom(urlString: urlString) { (data, error) in
+            if let data = data {
+                let json = try! JSONSerialization.jsonObject(with: data, options: [.allowFragments, .mutableLeaves])
+                print(json)
+            }
+        }
     }
 }
 
 protocol NetworkManager {
-    func fetchFrom(urlString: String)
+    func fetchFrom(urlString: String, completion: @escaping ((Data?, Error?) -> ()))
+}
+
+protocol NetworkSession {
+    func start(with request: URLRequest, finished: @escaping (Data?, Error?)->())
+}
+
+extension URLSession: NetworkSession {
+    func start(with request: URLRequest, finished: @escaping (Data?, Error?)->()) {
+        dataTask(with: request) { (data, response, error) in
+            finished(data, error)
+        }.resume()
+    }
 }
 
 class FlickrNetwork: NetworkManager {
-    func fetchFrom(urlString: String) {
-        
+    
+    let session: NetworkSession
+    init(session: NetworkSession) {
+        self.session = session
+    }
+
+    func fetchFrom(urlString: String, completion: @escaping ((Data?, Error?) -> ())) {
+        if let URL = URL(string: urlString) {
+            session.start(with: URLRequest(url: URL), finished: completion)
+        }
     }
 }

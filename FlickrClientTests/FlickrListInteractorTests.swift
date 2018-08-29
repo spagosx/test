@@ -31,10 +31,4 @@ class FlickrListInteractorTests: XCTestCase {
     }
 }
 
-class MockNetwork: NetworkManager {
-    
-    var fetchFromInvocations: [String] = []
-    func fetchFrom(urlString: String) {
-        fetchFromInvocations.append(urlString)
-    }
-}
+

@@ -31,12 +31,3 @@ class ViewControllerTests: XCTestCase {
     
 }
 
-class MockPresenter: FlickrListPresenter {
-    
-    var interactor: FlickrListInteractor?
-    
-    var viewReadyInvocations: Int = 0
-    func viewReady() {
-        viewReadyInvocations += 1
-    }
-}
