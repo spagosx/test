@@ -7,6 +7,7 @@
 
 import Foundation
 @testable import FlickrClient
+import UIKit
 
 class MockSession: NetworkSession {
     
@@ -42,6 +43,20 @@ class MockPresenter: FlickrListPresenter {
     func viewReady() {
         viewReadyInvocations += 1
     }
+    
+    func numberOfItems() -> Int {
+        return 2
+    }
+    
+    var setupCellInvocations: [(ConfigurablePhotoCell, IndexPath)] = []
+    func setup(cell: ConfigurablePhotoCell, at indexPath: IndexPath) {
+        setupCellInvocations.append((cell, indexPath))
+    }
+    
+    func identifier(for indexPath: IndexPath) -> String {
+        return "test identifier"
+    }
+
 }
 
 class MockWireframe: Wireframe {
@@ -51,7 +66,12 @@ class MockWireframe: Wireframe {
     }
 }
 
-class MockFlickrView: FlickrView {
+class MockFlickrView: FlickrListView {
+    var refreshInvocations: Int = 0
+    func refresh() {
+        refreshInvocations += 1
+    }
+    
     var presenter: FlickrListPresenter?
 }
 
@@ -68,5 +88,14 @@ class MockInteractorOutput: InteractorOutput {
     var didFetchFeedInvocations: [FlickrResponse] = []
     func didFetchFeed(list: FlickrResponse) {
         didFetchFeedInvocations.append(list)
+    }
+}
+
+class MockTableView: UITableView {
+    var dequeueReusableCellInvocations: [String] = []
+    var cellToReturn: FlickrCell = FlickrCell()
+    override func dequeueReusableCell(withIdentifier identifier: String) -> UITableViewCell? {
+        dequeueReusableCellInvocations.append(identifier)
+        return cellToReturn
     }
 }

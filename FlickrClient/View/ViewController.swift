@@ -16,6 +16,7 @@ class ViewController: UIViewController, FlickrListView {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.rowHeight = 160
         
         presenter?.viewReady()
     }
@@ -36,7 +37,9 @@ extension ViewController: UITableViewDataSource {
             return UITableViewCell()
         }
         let identifier = presenter.identifier(for: indexPath)
-        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath) as! FlickrCell
+        presenter.setup(cell: cell, at: indexPath)
         return cell
     }
+    
 }

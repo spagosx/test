@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Kingfisher
 
 protocol FlickrListView: FlickrView {
     func refresh()
@@ -17,6 +18,7 @@ protocol FlickrListPresenter {
     
     func numberOfItems() -> Int
     func identifier(for indexPath: IndexPath) -> String
+    func setup(cell: ConfigurablePhotoCell, at indexPath: IndexPath)
 }
 
 class DefaultFlickrListPresenter: FlickrListPresenter, InteractorOutput {
@@ -41,5 +43,19 @@ class DefaultFlickrListPresenter: FlickrListPresenter, InteractorOutput {
     
     func identifier(for indexPath: IndexPath) -> String {
         return "FlickrCell"
+    }
+    
+    func setup(cell: ConfigurablePhotoCell, at indexPath: IndexPath) {
+        guard let photo = list?.items[indexPath.row] else { return }
+        if let url = URL(string: (photo.media.imageUrl.replacingOccurrences(of: "\\", with: ""))) {
+            let resource = ImageResource(downloadURL: url)
+            cell.photoImageView.kf.setImage(with: resource)
+        }
+        cell.titleLabel.text = photo.title
+        cell.dateLabel.text = "Date taken: \(photo.date)"
+        cell.publishedLabel.text = "Published on: \(photo.published)"
+        cell.authorLabel.text = photo.author
+        cell.authorIdLabel.text = photo.authorId
+        cell.tagsLabel.text = photo.tags
     }
 }
