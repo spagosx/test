@@ -13,6 +13,12 @@ protocol Parsing {
 
 class FlickrFeedParser: Parsing {
     func parse<T>(data: Data) -> T? where T: Decodable {
-        return try! JSONDecoder().decode(T.self, from: data)
+        do {
+            let decoded = try JSONDecoder().decode(T.self, from: data)
+            return decoded
+        } catch {
+            return nil
+        }
+        
     }
 }

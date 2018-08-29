@@ -33,6 +33,8 @@ class DefaultFlickrListInteractor: FlickrListInteractor {
                 self.output?.didFetchFeed(list: feed)
             } else if let error = error {
                 print(error.localizedDescription)
+            } else {
+                print("parsing error")
             }
         }
     }
