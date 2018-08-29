@@ -10,9 +10,18 @@ import XCTest
 
 class FlickrListInteractorTests: XCTestCase {
     
+    var interactor: DefaultFlickrListInteractor!
+    var mockNetwork = MockNetwork()
+    var mockParser = MockParser()
+    var mockOutput = MockInteractorOutput()
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        interactor = DefaultFlickrListInteractor(networkManager: mockNetwork, feedParser: mockParser)
+        interactor.output = mockOutput
+        
+        interactor.fetchList()
     }
     
     override func tearDown() {
@@ -21,14 +30,22 @@ class FlickrListInteractorTests: XCTestCase {
     }
     
     func test_calls_network() {
-        
-        let mockNetwork = MockNetwork()
-        let interactor = DefaultFlickrListInteractor(networkManager: mockNetwork)
-        
-        interactor.fetchList()
-        
         XCTAssertEqual(mockNetwork.fetchFromInvocations.count, 1)
+    }
+    
+    func test_whenDataPresent_callsParser() {
+        XCTAssertEqual(mockParser.parseInvocations.count, 1)
+        XCTAssertEqual(mockParser.parseInvocations.first!, mockNetwork.dataToReturn)
+    }
+    
+    func test_callsOutputs_withSuccessParsing() {
+        XCTAssertEqual(mockOutput.didFetchFeedInvocations.count, 1)
+        XCTAssertEqual(mockOutput.didFetchFeedInvocations.first!, mockParser.responseToReturn)
     }
 }
 
-
+extension FlickrResponse: Equatable {
+    public static func ==(lhs: FlickrResponse, rhs: FlickrResponse) -> Bool {
+        return lhs.title == rhs.title
+    }
+}

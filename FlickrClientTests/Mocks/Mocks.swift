@@ -21,7 +21,10 @@ class MockNetwork: NetworkManager {
     var fetchFromInvocations: [String] = []
     func fetchFrom(urlString: String, completion: @escaping ((Data?, Error?) -> ())) {
         fetchFromInvocations.append(urlString)
+        completion(dataToReturn, nil)
     }
+    
+    var dataToReturn = "test data".data(using: .utf8)
 }
 
 class MockInteractor: FlickrListInteractor {
@@ -50,4 +53,20 @@ class MockWireframe: Wireframe {
 
 class MockFlickrView: FlickrView {
     var presenter: FlickrListPresenter?
+}
+
+class MockParser: Parsing {
+    var parseInvocations: [Data] = []
+    var responseToReturn: FlickrResponse? = FlickrResponse(title: "test title", items: [])
+    func parse<T>(data: Data) -> T? where T : Decodable {
+        parseInvocations.append(data)
+        return  responseToReturn as? T
+    }
+}
+
+class MockInteractorOutput: InteractorOutput {
+    var didFetchFeedInvocations: [FlickrResponse] = []
+    func didFetchFeed(list: FlickrResponse) {
+        didFetchFeedInvocations.append(list)
+    }
 }
