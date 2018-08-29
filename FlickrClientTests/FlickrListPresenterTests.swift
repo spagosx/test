@@ -50,7 +50,18 @@ class FlickrListPresenterTests: XCTestCase {
                                 authorId: "authorid 1",
                                 tags: "tags 1",
                                 media: FlickrPhotoMedia(imageUrl: ""))
-        presenter.didFetchFeed(list: FlickrResponse(title: "", items: [photo]))
+        
+        let photo2 = FlickrPhoto(title: "title 2",
+                                date: "date 2",
+                                published: "published 2",
+                                author: "author 2",
+                                authorId: "authorid 2",
+                                tags: "tags 2",
+                                media: FlickrPhotoMedia(imageUrl: ""))
+
+        
+        presenter.didFetchFeed(list: FlickrResponse(title: "", items: [photo, photo2]))
+        
         presenter.setup(cell: cell, at: IndexPath(row: 0, section: 0))
         XCTAssertEqual(cell.titleLabel.text, "title 1")
         XCTAssertEqual(cell.dateLabel.text, "Date taken: date 1")
@@ -58,6 +69,16 @@ class FlickrListPresenterTests: XCTestCase {
         XCTAssertEqual(cell.authorLabel.text, "author 1")
         XCTAssertEqual(cell.authorIdLabel.text, "authorid 1")
         XCTAssertEqual(cell.tagsLabel.text, "tags 1")
+        
+        presenter.setup(cell: cell, at: IndexPath(row: 1, section: 0))
+        
+        XCTAssertEqual(cell.titleLabel.text, "title 2")
+        XCTAssertEqual(cell.dateLabel.text, "Date taken: date 2")
+        XCTAssertEqual(cell.publishedLabel.text, "Published on: published 2")
+        XCTAssertEqual(cell.authorLabel.text, "author 2")
+        XCTAssertEqual(cell.authorIdLabel.text, "authorid 2")
+        XCTAssertEqual(cell.tagsLabel.text, "tags 2")
+
     }
 }
 
