@@ -11,10 +11,14 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var wireframe: Wireframe = FlickrWireframe()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        if let navCon = window?.rootViewController as? UINavigationController, let view = navCon.topViewController as? ViewController {
+            wireframe.wireUp(view: view)
+        }
+        
         return true
     }
 
