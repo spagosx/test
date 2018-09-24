@@ -10,38 +10,38 @@ import XCTest
 
 class FlickrListPresenterTests: XCTestCase {
     
+    var presenter: DefaultFlickrListPresenter!
+    var mockInteractor = MockInteractor()
+    var mockView = MockFlickrView()
+    
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        
+        presenter = DefaultFlickrListPresenter()
+        presenter.interactor = mockInteractor
+        presenter.view = mockView
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        
+        presenter = nil
+        
         super.tearDown()
     }
 
     func test_calls_fetchList_onViewReady() {
-        let presenter = DefaultFlickrListPresenter()
-        let mockInteractor = MockInteractor()
-        presenter.interactor = mockInteractor
-        
         presenter.viewReady()
         
         XCTAssertEqual(mockInteractor.fetchListInvocations, 1)
     }
     
     func test_calls_refresh_onListFetched() {
-        let presenter = DefaultFlickrListPresenter()
-        let mockView = MockFlickrView()
-        presenter.view = mockView
-        
         presenter.didFetchFeed(list: FlickrResponse(title: "", items: []))
         
         XCTAssertEqual(mockView.refreshInvocations, 1)
     }
     
     func test_setupCells_assignsValues() {
-        let presenter = DefaultFlickrListPresenter()
         let cell = MockFlickrCell()
         let photo = FlickrPhoto(title: "title 1",
                                 date: "date 1",
@@ -82,14 +82,6 @@ class FlickrListPresenterTests: XCTestCase {
     }
 }
 
-class MockFlickrCell: ConfigurablePhotoCell {
-    var photoImageView: UIImageView! = UIImageView()
-    var titleLabel: UILabel! = UILabel()
-    var dateLabel: UILabel! = UILabel()
-    var publishedLabel: UILabel! = UILabel()
-    var authorLabel: UILabel! = UILabel()
-    var authorIdLabel: UILabel! = UILabel()
-    var tagsLabel: UILabel! = UILabel()
-}
+
 
 

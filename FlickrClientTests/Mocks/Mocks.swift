@@ -99,3 +99,13 @@ class MockTableView: UITableView {
         return cellToReturn
     }
 }
+
+class MockFlickrCell: ConfigurablePhotoCell {
+    var photoImageView: UIImageView! = UIImageView()
+    var titleLabel: UILabel! = UILabel()
+    var dateLabel: UILabel! = UILabel()
+    var publishedLabel: UILabel! = UILabel()
+    var authorLabel: UILabel! = UILabel()
+    var authorIdLabel: UILabel! = UILabel()
+    var tagsLabel: UILabel! = UILabel()
+}
