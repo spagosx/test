@@ -27,6 +27,7 @@ class ViewControllerTests: XCTestCase {
         viewController = nil
         
         super.tearDown()
+        
     }
     
     func test_viewReady_onPresenter() {
